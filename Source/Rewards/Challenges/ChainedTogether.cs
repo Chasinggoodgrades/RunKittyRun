@@ -3,97 +3,19 @@ using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
+/// <summary>
+/// Chains between kitties, created by the Ring of Linked Fates (<see cref="ChainRing"/>).
+/// Reaching the last safezone while linked by rings awards the Chained auras.
+/// </summary>
 public static class ChainedTogether
 {
-    private const int REQUIRED_PLAYERS = 2;
-    private static Dictionary<int, Chain> KittyLightnings = new Dictionary<int, Chain>();
-    private static Dictionary<int, List<Kitty>> kittyGroups = new Dictionary<int, List<Kitty>>();
     private static float timerInterval = 0.01f;
-    private static Random rng = Globals.RANDOM_GEN;
     private static timer MoveChainTimer;
-    private static bool EventTriggered { get; set; } = false;
-    private static bool EventStarted { get; set; } = false;
-    private static bool IsStartingConditionValid = true;
     private static bool MoveChainTimerRunning = false;
-    // Chained by the event at round start and never left; ring-joined kitties are never added.
-    private static readonly List<Kitty> EligibleKitties = new List<Kitty>();
     private static readonly List<Chain> RingChains = new List<Chain>();
     private static readonly List<Kitty> RingReach = new List<Kitty>();
     private static readonly List<int> RingParent = new List<int>();
-
-    /// <summary>The event has begun once this game: a clean win does not arm it again (the admin command still can).</summary>
-    private static bool EventHasRun { get; set; } = false;
-
-    public static void OnRoundWon()
-    {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
-        if (EventHasRun || EventStarted || EventTriggered) return;
-        if (Globals.ROUND >= Gamemode.NumberOfRounds) return; // no next round to chain
-
-        if (CountPlayers() < REQUIRED_PLAYERS) return;
-
-        var all = Globals.ALL_KITTIES_LIST;
-        int lastSafezone = RegionList.SafeZones.Length - 1;
-
-        for (int i = 0; i < all.Count; i++)
-        {
-            var k = all[i];
-            if (k.ComputerControlled) continue;
-            if (k.CurrentSafeZone < lastSafezone) return; // somebody never reached the last safezone: not a clean win
-        }
-
-        TriggerEvent();
-    }
-
-    /// <summary>Human players in the game.</summary>
-    private static int CountPlayers()
-    {
-        int count = 0;
-        var all = Globals.ALL_KITTIES_LIST;
-
-        for (int i = 0; i < all.Count; i++)
-        {
-            if (!all[i].ComputerControlled) count++;
-        }
-
-        return count;
-    }
-
-    public static void TriggerEvent()
-    {
-        Utility.TimedTextToAllPlayers(4.0f,
-            $"{Colors.COLOR_TURQUOISE}Clean win! Chained Together Event Requirements Complete!{Colors.COLOR_RESET} {Colors.COLOR_YELLOW}Activating next round!{Colors.COLOR_RESET}");
-        EventTriggered = true;
-    }
-
-    public static void StartEvent()
-    {
-        if (!EventTriggered) return;
-        if (EventStarted) return; // no reason to begin this again.
-
-        // players may have left between the win and now
-        if (CountPlayers() < REQUIRED_PLAYERS)
-        {
-            EventTriggered = false;
-            Utility.TimedTextToAllPlayers(4.0f, $"{Colors.COLOR_YELLOW}Chained Together cancelled: it needs at least {REQUIRED_PLAYERS} players.{Colors.COLOR_RESET}");
-            return;
-        }
-
-        EventStarted = true;
-        EventHasRun = true;
-        try
-        {
-            SetGroups();
-            StartMoveChainTimer();
-            Utility.SimpleTimer(3.5f, () => Utility.TimedTextToAllPlayers(10.0f,
-                $"{Colors.COLOR_YELLOW}You may opt out of the chained together event by typing {Colors.COLOR_CYAN}-nochain{Colors.COLOR_RESET} {Colors.COLOR_RED} (must be before round starts).{Colors.COLOR_RESET}"));
-        }
-        catch (Exception e)
-        {
-            Logger.Warning($"Error in ChainedTogether.StartEvent {e.Message}");
-            throw;
-        }
-    }
+    private static readonly List<Kitty> NetworkBuffer = new List<Kitty>();
 
     private static void StartMoveChainTimer()
     {
@@ -114,54 +36,22 @@ public static class ChainedTogether
         }
     }
 
-    private static void RegenerateGroup(string kittyName)
-    {
-        // unused for now (see Kitty.cs): names are not unique, ids are
-        for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
-        {
-            var left = Globals.ALL_KITTIES_LIST[i];
-            if (left.Name != kittyName || !kittyGroups.TryGetValue(left.Player.Id, out var group)) continue;
-
-            DisposeGroupChains(group);
-            group.Remove(left);
-            kittyGroups.Remove(left.Player.Id);
-            if (group.Count >= 2) RechainGroup(group);
-            return;
-        }
-    }
-
     /// <summary>
-    /// This function will unchain all kitties and dispose of the chain objects. Should be called on <see cref="RoundManager.RoundEnd"/>
+    /// Disposes every chain and switches every ring off. Should be called on <see cref="RoundManager.RoundEnd"/>
     /// </summary>
     public static void UnchainAllKitties()
     {
-        // A chained round just ended (won, lost or timed out): the event is over and a new clean win can arm it again.
-        // (A round that was only armed, not yet chained, keeps its arming for the round to come.)
-        if (EventStarted)
-        {
-            EventStarted = false;
-            EventTriggered = false;
-            kittyGroups.Clear();
-        }
-
-        foreach(var kitty in Globals.ALL_KITTIES_LIST)
-        {
-            kitty.IsChained = false;
-            if (KittyLightnings.TryGetValue(kitty.Player.Id, out var chain))
-            {
-                chain.Dispose();
-                KittyLightnings.Remove(kitty.Player.Id);
-            }
-        }
         for (int i = 0; i < RingChains.Count; i++) RingChains[i].Dispose();
         RingChains.Clear();
-        kittyGroups.Clear();
-        EligibleKitties.Clear();
+
+        for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
+            Globals.ALL_KITTIES_LIST[i].IsChained = false;
+
         ChainRing.ResetAll();
     }
 
     /// <summary>
-    /// Ring chains: links the toggler to every enabled kitty within <paramref name="range"/>, and through them to everyone else reachable the same way.
+    /// Links the toggler to every enabled kitty within <paramref name="range"/>, and through them to everyone else reachable the same way.
     /// Every new link is at most <paramref name="range"/> long (below the chain max), so nobody gets pulled on connect. Existing ring links are kept.
     /// </summary>
     /// <returns>Number of other kitties in the toggler's ring network, 0 if it couldn't chain.</returns>
@@ -169,8 +59,6 @@ public static class ChainedTogether
     {
         try
         {
-            if (IsEventChained(toggler)) return 0;
-
             float rangeSq = range * range;
             RingReach.Clear();
             RingReach.Add(toggler);
@@ -233,9 +121,6 @@ public static class ChainedTogether
         }
     }
 
-    /// <summary>True when the kitty is chained by the Chained Together event (not by a ring).</summary>
-    public static bool IsEventChained(Kitty kitty) => kitty.IsChained && !IsRingChained(kitty);
-
     /// <summary>
     /// Removes every ring link of the kitty. Other links in its network stay.
     /// </summary>
@@ -257,7 +142,7 @@ public static class ChainedTogether
             RingChains[i].FirstKitty.IsChained = RingChains[i].SecondKitty.IsChained = true;
     }
 
-    private static bool CanRingChain(Kitty k) => k != null && k.Alive && (!k.IsChained || IsRingChained(k));
+    private static bool CanRingChain(Kitty k) => k != null && k.Alive;
 
     private static bool IsRingChained(Kitty k)
     {
@@ -288,178 +173,47 @@ public static class ChainedTogether
         return dx * dx + dy * dy;
     }
 
-    public static void OptOutOfChain(Kitty kitty)
-    {
-        try
-        {
-            ChainRing.DisableFor(kitty); // unregisters their ring too, or the next toggle would chain them again
-            LeaveRingChain(kitty);
-            EligibleKitties.Remove(kitty);
-            if (!kitty.IsChained) return;
-            if (!kittyGroups.TryGetValue(kitty.Player.Id, out var group)) return;
-
-            // Dispose every chain link in this group first so we never
-            // overwrite a KittyLightnings entry without freeing the old Chain.
-            DisposeGroupChains(group);
-
-            group.Remove(kitty);
-            kittyGroups.Remove(kitty.Player.Id);
-            kitty.IsChained = false;
-
-            if (group.Count == 1)
-            {
-                var solo = group[0];
-                kittyGroups.Remove(solo.Player.Id);
-                RegroupSoloKitty(solo);
-                if (!solo.IsChained) EligibleKitties.Remove(solo);
-            }
-            else if (group.Count >= 2)
-            {
-                RechainGroup(group);
-            }
-        }
-        catch (Exception e)
-        {
-            Logger.Warning($"Error in ChainedTogether.OptOutOfChain {e.Message}");
-            throw;
-        }
-    }
-
-    private static void DisposeGroupChains(List<Kitty> group)
-    {
-        for (int i = 0; i < group.Count - 1; i++)
-        {
-            var key = group[i].Player.Id;
-            if (KittyLightnings.TryGetValue(key, out var chain))
-            {
-                chain.Dispose();
-                KittyLightnings.Remove(key);
-            }
-        }
-    }
-
-    private static void RegroupSoloKitty(Kitty solo)
-    {
-        List<Kitty> targetGroup = null;
-        foreach (var g in kittyGroups.Values)
-        {
-            if (g.Count == 0 || g.Contains(solo)) continue;
-            targetGroup = g;
-            break; 
-        }
-
-        if (targetGroup == null)
-        {
-            // No other group exist — solo kitty just travels unchained
-            return;
-        }
-
-        targetGroup.Add(solo);
-        kittyGroups[solo.Player.Id] = targetGroup;
-
-        // Only chain the new link (previous last member -> solo).
-        // Existing chains in targetGroup are untouched.
-        var previousLast = targetGroup[targetGroup.Count - 2];
-        var newChain = ObjectPool<Chain>.GetEmptyObject();
-        newChain.SetKitties(previousLast, solo);
-        previousLast.IsChained = true;
-        solo.IsChained = true;
-        KittyLightnings[previousLast.Player.Id] = newChain;
-    }
-
-    private static void FreeKittiesFromGroup(int kittyId, bool isVictory = false)
-    {
-        if (!kittyGroups.TryGetValue(kittyId, out var group)) return;
-        foreach (var k in group)
-        {
-            k.IsChained = false;
-            if (KittyLightnings.TryGetValue(k.Player.Id, out var c))
-            {
-                c.Dispose();
-                KittyLightnings.Remove(k.Player.Id);
-            }
-            if (isVictory && EligibleKitties.Contains(k)) AwardChainedTogether(k);
-        }
-        foreach (var k in group)
-        {
-            kittyGroups.Remove(k.Player.Id);
-            EligibleKitties.Remove(k);
-        }
-    }
-
-    private static void SetGroups()
-    {
-        var all = new List<Kitty>(Globals.ALL_KITTIES_LIST);
-        int count = all.Count;
-        for (int i = count - 1; i > 0; i--)
-        {
-            int j = rng.Next(i + 1);
-            var temp = all[i];
-            all[i] = all[j];
-            all[j] = temp;
-        }
-
-        List<List<Kitty>> groups = new();
-        if (count < 3)
-            groups.Add(all);
-        else
-        {
-            int groupsOfThree = count / 3;
-            int rem = count % 3;
-            if (rem == 1)
-            {
-                groupsOfThree--;
-                rem += 3;
-            }
-            int idx = 0;
-            for (int i = 0; i < groupsOfThree; i++)
-            {
-                groups.Add(all.GetRange(idx, 3));
-                idx += 3;
-            }
-            if (idx < count)
-                groups.Add(all.GetRange(idx, count - idx));
-        }
-
-        EligibleKitties.Clear();
-        foreach (var g in groups)
-        {
-            RechainGroup(g);
-            if (g.Count >= 2) EligibleKitties.AddRange(g);
-        }
-    }
-
-    private static void RechainGroup(List<Kitty> group)
-    {
-        for (int i = 0; i < group.Count - 1; i++)
-        {
-            var a = group[i];
-            var b = group[i + 1];
-            a.IsChained = b.IsChained = true;
-
-            // never overwrite a chain that is still standing: it would go on pulling and drawing, unseen
-            if (KittyLightnings.TryGetValue(a.Player.Id, out var old)) old.Dispose();
-
-            var chain = ObjectPool<Chain>.GetEmptyObject();
-            chain.SetKitties(a, b);
-            KittyLightnings[a.Player.Id] = chain;
-            kittyGroups[a.Player.Id] = group;
-            kittyGroups[b.Player.Id] = group;
-        }
-    }
-
+    /// <summary>
+    /// Reaching the last safezone while linked by rings awards the Chained aura to everyone alive in that ring network,
+    /// then frees them so they can walk to the victory zone on their own.
+    /// </summary>
     public static void ReachedSafezone(Kitty kitty)
     {
         try
         {
-            if (!EventStarted) return;
-            if (!IsInLastSafezone(kitty)) return;
-            FreeKittiesFromGroup(kitty.Player.Id, true);
+            if (!Globals.GAME_ACTIVE) return;
+            if (!IsInLastSafezone(kitty) || !IsRingChained(kitty)) return;
+
+            CollectRingNetwork(kitty, NetworkBuffer);
+            for (int i = 0; i < NetworkBuffer.Count; i++)
+            {
+                if (NetworkBuffer[i].Alive) AwardChainedTogether(NetworkBuffer[i]);
+            }
+
+            for (int i = 0; i < NetworkBuffer.Count; i++) ChainRing.DisableFor(NetworkBuffer[i]);
+            NetworkBuffer.Clear();
         }
         catch (Exception e)
         {
             Logger.Warning($"Error in ChainedTogether.ReachedSafezone {e.Message}");
             throw;
+        }
+    }
+
+    /// <summary>Fills <paramref name="result"/> with the kitty and everyone reachable from it through ring links.</summary>
+    private static void CollectRingNetwork(Kitty start, List<Kitty> result)
+    {
+        result.Clear();
+        result.Add(start);
+        for (int r = 0; r < result.Count; r++)
+        {
+            var from = result[r];
+            for (int c = 0; c < RingChains.Count; c++)
+            {
+                var chain = RingChains[c];
+                Kitty other = chain.FirstKitty == from ? chain.SecondKitty : chain.SecondKitty == from ? chain.FirstKitty : null;
+                if (other != null && !result.Contains(other)) result.Add(other);
+            }
         }
     }
 

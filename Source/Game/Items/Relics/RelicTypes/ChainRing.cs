@@ -20,8 +20,8 @@ public class ChainRing : Relic
 
     public ChainRing() : base(
         $"{Colors.COLOR_PURPLE}Ring of Linked Fates|r",
-        $"Toggle on to chain yourself to every kitty with an enabled ring within {Colors.COLOR_ORANGE}{(int)CHAIN_RING_RANGE} range|r, and through them to others in range of those kitties. " +
-        $"{Colors.COLOR_ORANGE}(Toggle)|r {Colors.COLOR_LIGHTBLUE}(Does not count towards the relic limit)|r",
+        $"Switch on between rounds to chain yourself to every kitty with an enabled ring within {Colors.COLOR_ORANGE}{(int)CHAIN_RING_RANGE} range|r, and through them to others. " +
+        $"{Colors.COLOR_ORANGE}(Toggle)|r {Colors.COLOR_LIGHTBLUE}(No relic slot used)|r",
         RelicAbilityID,
         RelicItemID,
         RelicCost,
@@ -60,7 +60,7 @@ public class ChainRing : Relic
     }
 
     /// <summary>
-    /// Turns the kitty's ring off and unregisters it (links included), e.g. when they opt out of chains with -nochain,
+    /// Turns the kitty's ring off and unregisters it (links included), e.g. when the kitty finishes the chained challenge,
     /// so other players' rings no longer pick them up.
     /// </summary>
     public static void DisableFor(Kitty kitty)
@@ -85,9 +85,9 @@ public class ChainRing : Relic
 
         if (!Owner.Alive) return;
 
-        if (ChainedTogether.IsEventChained(Owner))
+        if (Globals.GAME_ACTIVE)
         {
-            Owner.Player.DisplayTimedTextTo(4.0f, $"{Colors.COLOR_YELLOW}You are already chained.{Colors.COLOR_RESET}");
+            Owner.Player.DisplayTimedTextTo(4.0f, $"{Colors.COLOR_YELLOW}The ring can only be switched on between rounds, while the game is not active.{Colors.COLOR_RESET}");
             return;
         }
 

@@ -2265,7 +2265,7 @@
           "type": 3,
           "valueInt": null,
           "valueFloat": null,
-          "valueString": "|cffffcc00Toggle on to chain yourself to every kitty with an enabled ring within |cffff8c00600 range|r|cffffcc00, and through them to others in range of those kitties. |r|cffff8c00(Toggle)|r |cffadd8e6(Does not count towards the relic limit)|r",
+          "valueString": "|cffffcc00Switch on between rounds to chain yourself to every kitty with an enabled ring within |cffff8c00600 range|r|cffffcc00, and through them to others. |r|cffff8c00(Toggle)|r |cffadd8e6(No relic slot used)|r",
           "level": null,
           "column": null
         },
@@ -2274,7 +2274,7 @@
           "type": 3,
           "valueInt": null,
           "valueFloat": null,
-          "valueString": "|cffffcc00Toggle on to chain yourself to every kitty with an enabled ring within |cffff8c00600 range|r|cffffcc00, and through them to others in range of those kitties. |r|cffff8c00(Toggle)|r |cffadd8e6(Does not count towards the relic limit)|r",
+          "valueString": "|cffffcc00Switch on between rounds to chain yourself to every kitty with an enabled ring within |cffff8c00600 range|r|cffffcc00, and through them to others. |r|cffff8c00(Toggle)|r |cffadd8e6(No relic slot used)|r",
           "level": null,
           "column": null
         },
@@ -2378,7 +2378,7 @@
           "type": 3,
           "valueInt": null,
           "valueFloat": null,
-          "valueString": "|cffffcc00Press at the same time as another kitty with an Engagement Ring (within |cffff8c005 seconds|r|cffffcc00) to marry the nearest one. Married kitties shower each other in hearts, and again whenever they are close. |r|cffff8c00(Active)|r |cffadd8e6(Does not count towards the relic limit)|r",
+          "valueString": "|cffffcc00Press at the same time as another kitty with an Engagement Ring (within |cffff8c005 seconds|r|cffffcc00) to marry the nearest one. Married kitties shower each other in hearts. |r|cffff8c00(Active)|r |cffadd8e6(No relic slot used)|r",
           "level": null,
           "column": null
         },
@@ -2387,7 +2387,7 @@
           "type": 3,
           "valueInt": null,
           "valueFloat": null,
-          "valueString": "|cffffcc00Press at the same time as another kitty with an Engagement Ring (within |cffff8c005 seconds|r|cffffcc00) to marry the nearest one. Married kitties shower each other in hearts, and again whenever they are close. |r|cffff8c00(Active)|r |cffadd8e6(Does not count towards the relic limit)|r",
+          "valueString": "|cffffcc00Press at the same time as another kitty with an Engagement Ring (within |cffff8c005 seconds|r|cffffcc00) to marry the nearest one. Married kitties shower each other in hearts. |r|cffff8c00(Active)|r |cffadd8e6(No relic slot used)|r",
           "level": null,
           "column": null
         },

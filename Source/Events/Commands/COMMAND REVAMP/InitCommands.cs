@@ -1762,18 +1762,6 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
-            name: "nochain",
-            alias: "",
-            tier: CommandTier.All,
-            argDesc: "",
-            description: "Lets you opt out of the chained together event.",
-            action: (player, args) =>
-            {
-                ChainedTogether.OptOutOfChain(Globals.ALL_KITTIES[player]);
-            }
-        );
-
-        CommandsManager.RegisterCommand(
             name: "times",
             alias: "gettimes",
             tier: CommandTier.All,
@@ -2234,19 +2222,6 @@ public static class InitCommands
                     x += $"{Colors.PlayerNameColored(k.Player)} ({k.Player.Id})\n";
                 }
                 Console.WriteLine(x);
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "chainedtest",
-            alias: "",
-            tier: CommandTier.Developer,
-            argDesc: "",
-            description: "Starts chained together test",
-            action: (player, args) =>
-            {
-                ChainedTogether.TriggerEvent();
-                ChainedTogether.StartEvent();
             }
         );
 

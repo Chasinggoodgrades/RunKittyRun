@@ -57,16 +57,16 @@ public static class RewardDisplayData
                 reward.WithDisplay("|cff82a0ffFrozen Aura|r", "Using the |cff8080ffFrostbite Ring|r, collectively freeze a total of 50 wolves in a single game and win on |cffffff00Normal+|r.");
                 break;
             case nameof(Auras.ChainedNormalAura):
-                reward.WithDisplay("|cff00ff00Chained Aura Normal|r", "Obtained by beating the Chained Together Event on |cffffff00Normal+|r.");
+                reward.WithDisplay("|cff00ff00Chained Aura Normal|r", "Obtained by reaching the last safezone while linked by Rings of Linked Fates on |cffffff00Normal+|r.");
                 break;
             case nameof(Auras.ChainedHardAura):
-                reward.WithDisplay("|cffffff00Chained Aura Hard|r", "Obtained by beating the Chained Together Event on |cffff0000Hard+|r.");
+                reward.WithDisplay("|cffffff00Chained Aura Hard|r", "Obtained by reaching the last safezone while linked by Rings of Linked Fates on |cffff0000Hard+|r.");
                 break;
             case nameof(Auras.ChainedImpossibleAura):
-                reward.WithDisplay("|cffff0000Chained Aura Impossible|r", "Obtained by beating the Chained Together Event on |cff960000Impossible+|r.");
+                reward.WithDisplay("|cffff0000Chained Aura Impossible|r", "Obtained by reaching the last safezone while linked by Rings of Linked Fates on |cff960000Impossible+|r.");
                 break;
             case nameof(Auras.ChainedNightmareAura):
-                reward.WithDisplay("|cffff00ffChained Aura Nightmare|r", "Obtained by beating the Chained Together Event on |cffff00ffNightmare|r.");
+                reward.WithDisplay("|cffff00ffChained Aura Nightmare|r", "Obtained by reaching the last safezone while linked by Rings of Linked Fates on |cffff00ffNightmare|r.");
                 break;
             case nameof(Auras.TemperedAura):
                 reward.WithDisplay("|cffe4e4e4Tempered Aura|r", $"Obtained by collectively gathering {Challenges.TEMPERED_AURA_KIBBLE_REQUIREMENT} kibble and then winning the game on |cff960000Impossible+|r during the Pre-League Season.");

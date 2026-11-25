@@ -29,8 +29,8 @@ public class EngagementRing : Relic
 
     public EngagementRing() : base(
         $"{Colors.COLOR_PINK}Engagement Ring|r",
-        $"Press at the same time as another kitty with an Engagement Ring (within {Colors.COLOR_ORANGE}{(int)PROPOSAL_WINDOW} seconds|r) to marry the nearest one. Married kitties shower each other in hearts, and again whenever they are close. " +
-        $"{Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(Does not count towards the relic limit)|r",
+        $"Press at the same time as another kitty with an Engagement Ring (within {Colors.COLOR_ORANGE}{(int)PROPOSAL_WINDOW} seconds|r) to marry the nearest one. Married kitties shower each other in hearts. " +
+        $"{Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(No relic slot used)|r",
         RelicAbilityID,
         RelicItemID,
         RelicCost,

@@ -23,7 +23,6 @@ All,mirror,,Toggle mirror mode.
 All,moretime,,Adds 20 secondsd to the round timer. Can only happen once per round.
 All,music,,Opens the music frame.
 All,names,,Hides all floating name tags.
-All,nochain,,Lets you opt out of the chained together event.
 All,overheadcam,,Gives an overhead view.
 All,personalbests,[resolvePlayerId],"Gets personal best stats of the passed parm player, if no parm then yourself."
 All,reset,,Resets your camera to their default settings.
@@ -116,7 +115,6 @@ Admin,wolfeffects,[true][false],Disables the wolves overhead ! effects
 Admin,wolfpause,[on][off],Pauses selected wolf. Defaults to [on]
 Admin,wolfshare,[on][off],Gives you control of all the wolves.
 Developer,benchmarktest,,Runs a benchmark test for collision detection. Results are printed. Beware of lag -- will cause performance issues while running.
-Developer,chainedtest,,Starts chained together test
 Developer,chaineffect,,Testing the chain effect model
 Developer,fortest,[on][off],"Foreach memory test, executes 20k iterations of foreach loop."
 Developer,kittylist,,Puts an effect test on for some nitro thingy

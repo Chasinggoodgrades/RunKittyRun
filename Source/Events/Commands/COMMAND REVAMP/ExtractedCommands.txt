@@ -23,7 +23,6 @@
 - moretime [] - Adds 20 secondsd to the round timer. Can only happen once per round.
 - music [] - Opens the music frame.
 - names [] - Hides all floating name tags.
-- nochain [] - Lets you opt out of the chained together event.
 - overheadcam [] - Gives an overhead view.
 - personalbests [[resolvePlayerId]] - Gets personal best stats of the passed parm player, if no parm then yourself.
 - reset [] - Resets your camera to their default settings.
@@ -124,7 +123,6 @@
 
 **Developer Commands**
 - benchmarktest [] - Runs a benchmark test for collision detection. Results are printed. Beware of lag -- will cause performance issues while running.
-- chainedtest [] - Starts chained together test
 - chaineffect [] - Testing the chain effect model
 - fortest [[on][off]] - Foreach memory test, executes 20k iterations of foreach loop.
 - kittylist [] - Puts an effect test on for some nitro thingy
