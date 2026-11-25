@@ -158,14 +158,14 @@ public class EngagementRing : Relic
 
     private static void ShowHearts(Kitty a, Kitty b)
     {
-        if (a.Alive) SpawnHeart(a.Unit);
-        if (b.Alive) SpawnHeart(b.Unit);
+        if (a.Alive) SpawnHeart(a);
+        if (b.Alive) SpawnHeart(b);
     }
 
-    private static void SpawnHeart(unit Unit)
+    private static void SpawnHeart(Kitty kitty)
     {
-        var heart = effect.Create(HEART_EFFECT, Unit, "overhead");
-        Utility.SimpleTimer(HEART_LIFETIME, () => heart.Dispose());
+        var heart = kitty.AddKittyEffect(HEART_EFFECT, "overhead");
+        Utility.SimpleTimer(HEART_LIFETIME, () => kitty.RemoveKittyEffect(heart));
     }
 
     private static float DistanceSq(Kitty a, Kitty b)
