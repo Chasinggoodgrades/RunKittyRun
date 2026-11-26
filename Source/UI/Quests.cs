@@ -109,14 +109,16 @@ public static class Quests
         ChainedTogetherQuest.SetDescription(
             $"{Colors.COLOR_YELLOW}Proximity-based challenge requiring constant coordination.{Colors.COLOR_RESET}\n\n" +
             $"{Colors.COLOR_YELLOW_ORANGE}Activation:{Colors.COLOR_RESET}\n" +
-            $"• Every player must reach the last safezone in a round\n" +
-            $"• At least 2 players in the game\n" +
-            $"• Begins next round after activation\n\n" +
+            $"• Buy the Ring of Linked Fates from the relic shop (it does not count towards your relic limit)\n" +
+            $"• Switch it on between rounds, while the game is not active\n" +
+            $"• It links you to every kitty with an enabled ring within range, and through them to others\n" +
+            $"• Rings switch off at the end of every round\n\n" +
             $"{Colors.COLOR_YELLOW_ORANGE}Objective:{Colors.COLOR_RESET}\n" +
-            $"• Maintain proximity to at least one other player\n" +
+            $"• Stay within range of your linked kitties (the leash pulls you back)\n" +
             $"• Lightning effects show active connections\n" +
             $"• Range requirement varies by difficulty\n" +
-            $"• Complete the round while maintaining chains\n\n" +
+            $"• Reach the last safezone while linked to complete it\n" +
+            $"• Chained kitties cannot be summoned or summon shadow kitties\n\n" +
             $"{Colors.COLOR_YELLOW_ORANGE}Rewards:{Colors.COLOR_RESET} Chained auras - {Colors.COLOR_YELLOW}Normal{Colors.COLOR_RESET}, {Colors.COLOR_RED}Hard{Colors.COLOR_RESET}, {Colors.COLOR_DARK_RED}Impossible{Colors.COLOR_RESET}, {Colors.COLOR_PURPLE}Nightmare{Colors.COLOR_RESET} variants.");
     }
 }

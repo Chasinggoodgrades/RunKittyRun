@@ -107,6 +107,7 @@ public static class Utility
                 {
                         relic?.RemoveEffect(kitty.Unit);
                 }
+                MiscItemUtil.RemoveAll(kitty);
                 PlayerUpgrades.ResetPlayerUpgrades(kitty.Player);
                 RemoveAllItemsFromUnit(kitty.Unit);
                 kitty.Relics = new List<Relic>();

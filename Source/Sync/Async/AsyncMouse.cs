@@ -21,6 +21,7 @@ public static class AsyncMouse
     private static Func<bool> isRightPressedFn;
     private static Func<float> mouseXFn;
     private static Func<float> mouseYFn;
+    private static Func<bool> isActiveFn;
     private static bool initialized;
 
     /// <summary>False when the Lua natives could not be reached: every async feature then stays off.</summary>
@@ -49,6 +50,12 @@ public static class AsyncMouse
                     return BlzPixelToFrameY(BlzGetMouseScreenPosY())
                 end");
 
+            // false while this machine's game window is not the focused one (alt-tabbed, other monitor)
+            isActiveFn = CompileBool(
+                @"return function()
+                    return BlzIsLocalClientActive() and true or false
+                end");
+
             IsAvailable = isRightPressedFn != null && mouseXFn != null && mouseYFn != null;
         }
         catch (Exception e)
@@ -72,6 +79,14 @@ public static class AsyncMouse
         if (chunk == null) return null;
 
         return (Func<float>)Lua.Call(chunk);
+    }
+
+    /// <summary>Whether the game window of this machine has the focus. Clicks made elsewhere must not steer the Kitty.</summary>
+    public static bool IsWindowActive()
+    {
+        if (!IsAvailable || isActiveFn == null) return true;
+
+        return isActiveFn();
     }
 
     /// <summary>Whether the right button of this machine is down right now.</summary>

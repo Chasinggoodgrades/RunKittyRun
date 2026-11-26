@@ -43,7 +43,6 @@ public static class RoundManager
 
             RoundTimer.CountDown();
             TeamDeathless.StartEvent();
-            ChainedTogether.StartEvent();
             WolfLaneHider.HideAllLanes();
             WolfLaneHider.LanesHider();
             MultiboardUtil.RefreshMultiboards();

@@ -1598,6 +1598,7 @@ public static class InitCommands
                 if (args.Length < 2 || args[1] == "")
                 {
                     BlzSetUnitSkin(Globals.ALL_KITTIES[player].Unit, skin);
+                    Globals.ALL_KITTIES[player].RefreshUnitName();
                     Globals.ALL_KITTIES[player].AsyncEffect?.ReapplyUnitHidden(true);
                     return;
                 }
@@ -1606,6 +1607,7 @@ public static class InitCommands
                 {
                     if (kitty == null) return;
                     BlzSetUnitSkin(kitty.Unit, skin);
+                    kitty.RefreshUnitName();
                     kitty.AsyncEffect?.ReapplyUnitHidden(true);
                 });
                 return;
@@ -1756,18 +1758,6 @@ public static class InitCommands
                 var status = args[0] != "" && CommandsManager.GetBool(args[0]);
                 ErrorHandler.SetPlayerOverride(player, status);
                 player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Error messages: {status}");
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "nochain",
-            alias: "",
-            tier: CommandTier.All,
-            argDesc: "",
-            description: "Lets you opt out of the chained together event.",
-            action: (player, args) =>
-            {
-                ChainedTogether.OptOutOfChain(Globals.ALL_KITTIES[player]);
             }
         );
 
@@ -2236,19 +2226,6 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
-            name: "chainedtest",
-            alias: "",
-            tier: CommandTier.Developer,
-            argDesc: "",
-            description: "Starts chained together test",
-            action: (player, args) =>
-            {
-                ChainedTogether.TriggerEvent();
-                ChainedTogether.StartEvent();
-            }
-        );
-
-        CommandsManager.RegisterCommand(
             name: "savetesting",
             alias: "ast",
             tier: CommandTier.Developer,
@@ -2457,7 +2434,7 @@ public static class InitCommands
                     }
 
                     kitty.CommandTier = newTier;
-                    kitty.Unit.Name = $"{Colors.PlayerNameColored(kitty.Player)} ({Colors.GetColoredCommandTier(newTier)})";
+                    kitty.RefreshUnitName();
                     player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Set CommandTier for {Colors.PlayerNameColored(kitty.Player)} to {newTier}{Colors.COLOR_RESET}");
                 });
             }

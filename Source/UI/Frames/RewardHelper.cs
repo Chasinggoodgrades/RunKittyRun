@@ -6,6 +6,7 @@ public class RewardHelper
     public List<Reward> Wings;
     public List<Reward> Trails;
     public List<Reward> Auras;
+    public List<Reward> Windwalks;
 
     public RewardHelper()
     {
@@ -13,6 +14,7 @@ public class RewardHelper
         Wings = new List<Reward>();
         Trails = new List<Reward>();
         Auras = new List<Reward>();
+        Windwalks = new List<Reward>();
     }
 
     public void AddReward(Reward reward)
@@ -36,6 +38,10 @@ public class RewardHelper
             case RewardType.Auras:
                 Auras.Add(reward);
                 break;
+
+            case RewardType.Windwalks:
+                Windwalks.Add(reward);
+                break;
         }
     }
 
@@ -45,6 +51,7 @@ public class RewardHelper
         Wings.Clear();
         Trails.Clear();
         Auras.Clear();
+        Windwalks.Clear();
     }
 
     public static int GetAwardNestedValue(object saveData, string awardName)

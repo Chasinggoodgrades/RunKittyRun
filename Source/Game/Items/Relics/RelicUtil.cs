@@ -50,7 +50,8 @@ public static class RelicUtil
     public static void SetRelicCooldowns(unit unit, int itemID, int abilityID, float cooldown = 0)
     {
         // Get item from unit.. Drop it.. Set Cooldown of it, and set cooldown of ability on the unit to cooldown
-        var item = Utility.UnitGetItem(unit, itemID);
+        var item = unit == null ? null : Utility.UnitGetItem(unit, itemID);
+        if (item == null) return;
         var itemAbility = item.GetAbility(abilityID);
         var unitAbility = unit.GetAbility(abilityID);
         var itemSlot = Utility.GetSlotOfItem(unit, itemID);
@@ -68,7 +69,8 @@ public static class RelicUtil
 
     public static void SetAbilityCooldown(unit unit, int itemID, int abilityID, float cooldown)
     {
-        var item = Utility.UnitGetItem(unit, itemID);
+        var item = unit == null ? null : Utility.UnitGetItem(unit, itemID);
+        if (item == null) return;
         var itemSlot = Utility.GetSlotOfItem(unit, itemID);
         var unitAbility = unit.GetAbility(abilityID);
         if (Globals.ALL_KITTIES[unit.Owner].Alive) unit.RemoveItem(item);

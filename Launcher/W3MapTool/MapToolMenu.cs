@@ -10,6 +10,20 @@ public static class MapToolMenu
     private const string OutputDir = @"..\..\..\W3MapTool\ObjectData";
     private const string MapFolder = @"..\..\..\..\source.w3x";
 
+    public static void ImportObjectData()
+    {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        ObjectDataImporter.Import(Path.GetFullPath(MapFolder), Path.GetFullPath(OutputDir));
+    }
+
+    public static void ExportObjectData()
+    {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        string outputDir = Path.GetFullPath(OutputDir);
+        Directory.CreateDirectory(outputDir);
+        ObjectDataExporter.Export(Path.GetFullPath(MapFolder), outputDir);
+    }
+
     public static void Run(string[] args)
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);

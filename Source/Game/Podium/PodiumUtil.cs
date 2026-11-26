@@ -70,6 +70,7 @@ public static class PodiumUtil
             var podium = Regions.Podium_cinematic;
             if (player.IsLocal)
             {
+                CameraUtil.PauseFollow(); // the pan below must not be pulled back onto the Kitty
                 SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 1400.0f, 0.0f);
                 PanCameraToTimed(podium.Center.X, podium.Center.Y, 2.0f);
             }

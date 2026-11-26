@@ -458,6 +458,7 @@ public class KittyAsyncEffect
         int skin = BlzGetUnitSkin(kitty.Unit);
         BlzSetUnitSkin(kitty.Unit, skin == FourCC("hpea") ? FourCC("hfoo") : FourCC("hpea"));
         BlzSetUnitSkin(kitty.Unit, skin);
+        kitty.RefreshUnitName(); // a skin change resets the unit name
     }
 
     private void SetUnitHidden(bool hidden)

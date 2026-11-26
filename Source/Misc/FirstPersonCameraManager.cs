@@ -34,6 +34,9 @@ public class FirstPersonCamera
         {
             if (forceCamTimer == null)
             {
+                // first person drives the real unit directly (no latency to hide): the stand-in effect steps aside
+                Globals.GetKitty(player)?.AsyncEffect?.Hide();
+
                 forceCamTimer = CreateTimer();
                 TimerStart(forceCamTimer, timerPeriod, true, ErrorHandler.Wrap(UpdateCamera));
             }
@@ -46,6 +49,9 @@ public class FirstPersonCamera
                 DestroyTimer(forceCamTimer);
                 forceCamTimer = null;
                 ResetCamera();
+
+                var kitty = Globals.GetKitty(player);
+                if (kitty != null && kitty.Alive) kitty.AsyncEffect?.Show(); // stands in again where the unit is
             }
         }
     }
@@ -224,6 +230,11 @@ public static class FirstPersonCameraManager
         {
             cameras[player].ToggleFirstPerson(!cameras[player].IsFirstPerson());
         }
+    }
+
+    public static bool IsFirstPerson(player player)
+    {
+        return cameras.TryGetValue(player, out var camera) && camera.IsFirstPerson();
     }
 
     public static void SetFirstPerson(player player, bool active)

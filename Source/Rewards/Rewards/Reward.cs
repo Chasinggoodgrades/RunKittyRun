@@ -86,6 +86,9 @@ public class Reward
     /// </summary>
     /// <param name="player">The player object to which the reward will be applied.</param>
     /// <param name="setData">Indicates whether to alter the saved data while setting the player's rewards. Default is true.</param>
+    /// <summary>Whether this reward is the one the player has selected (and so is wearing) for its category.</summary>
+    public bool IsSelectedIn(GameSelectedData data) => Handler.GetSelected(data) == Name;
+
     public void ApplyReward(player player, bool setData = true)
     {
         if (!Globals.ALL_KITTIES.TryGetValue(player, out var kitty)) return;

@@ -1,0 +1,113 @@
+// -- Shop theme: generated textures live in Shop_*.tga (see Scripts/generate_shop_theme.py) ------
+Frame "BACKDROP" "ShopWindowBackdrop" {
+    BackdropBackground "war3mapImported\Shop_Window.tga",
+    BackdropBlendAll,
+}
+
+Frame "BACKDROP" "ShopWindowTallBackdrop" {
+    BackdropBackground "war3mapImported\Shop_WindowTall.tga",
+    BackdropBlendAll,
+}
+
+Frame "BACKDROP" "ShopWindowSquareBackdrop" {
+    BackdropBackground "war3mapImported\Shop_WindowSquare.tga",
+    BackdropBlendAll,
+}
+
+Frame "BACKDROP" "ShopPanelBackdrop" {
+    BackdropBackground "war3mapImported\Shop_Panel.tga",
+    BackdropBlendAll,
+}
+
+Frame "BACKDROP" "ShopHeaderBackdrop" {
+    BackdropBackground "war3mapImported\Shop_Header.tga",
+    BackdropBlendAll,
+}
+
+Frame "BACKDROP" "ShopTooltipBackdrop" {
+    BackdropBackground "war3mapImported\Shop_Tooltip.tga",
+    BackdropBlendAll,
+}
+
+Frame "BACKDROP" "ShopSelectorBackdrop" {
+    BackdropBackground "war3mapImported\Shop_SlotSelected.tga",
+    BackdropBlendAll,
+}
+
+Frame "BACKDROP" "ShopDividerBackdrop" {
+    BackdropBackground "war3mapImported\Shop_Divider.tga",
+    BackdropBlendAll,
+}
+
+Frame "BACKDROP" "ShopSlotBackdropFrame" {
+    BackdropBackground "war3mapImported\Shop_Slot.tga",
+    BackdropBlendAll,
+}
+
+// -- Item slot ---------------------------------------------------------
+Frame "GLUEBUTTON" "ShopSlotButton" {
+    UseActiveContext,
+    ControlStyle "AUTOTRACK|HIGHLIGHTONMOUSEOVER",
+    // the icon is part of the template, defined before the highlight so the hover glow is drawn over it
+    Frame "BACKDROP" "ShopSlotIcon" {
+        UseActiveContext,
+        SetPoint TOPLEFT, "ShopSlotButton", TOPLEFT, 0.0025, -0.0025,
+        SetPoint BOTTOMRIGHT, "ShopSlotButton", BOTTOMRIGHT, -0.0025, 0.0025,
+    }
+    ControlBackdrop "ShopSlotButtonBack",
+    Frame "BACKDROP" "ShopSlotButtonBack" {
+        BackdropBackground "war3mapImported\Shop_Slot.tga",
+        BackdropBlendAll,
+    }
+    ControlPushedBackdrop "ShopSlotButtonPushed",
+    Frame "BACKDROP" "ShopSlotButtonPushed" {
+        BackdropBackground "war3mapImported\Shop_Slot.tga",
+        BackdropBlendAll,
+    }
+    ControlMouseOverHighlight "ShopSlotButtonHighlight",
+    Frame "HIGHLIGHT" "ShopSlotButtonHighlight" {
+        HighlightType "FILETEXTURE",
+        HighlightAlphaFile "war3mapImported\Shop_SlotHover.tga",
+        HighlightAlphaMode "ADD",
+    }
+}
+
+Frame "TEXT" "ShopPanelTitleText" {
+    FontFlags "FIXEDSIZE",
+    FrameFont "MasterFont", 0.0135, "",
+    FontColor 1.0 0.84 0.4 1.0,
+    FontShadowColor 0.0 0.0 0.0 0.9,
+    FontShadowOffset 0.001 -0.001,
+}
+
+Frame "TEXT" "ShopNameText" {
+    FontFlags "FIXEDSIZE",
+    FrameFont "MasterFont", 0.0145, "",
+    FontColor 1.0 0.9 0.55 1.0,
+    FontShadowColor 0.0 0.0 0.0 0.9,
+    FontShadowOffset 0.001 -0.001,
+}
+
+Frame "TEXT" "ShopCostText" {
+    FontFlags "FIXEDSIZE",
+    FrameFont "MasterFont", 0.0125, "",
+    FontColor 1.0 1.0 1.0 1.0,
+    FontShadowColor 0.0 0.0 0.0 0.9,
+    FontShadowOffset 0.001 -0.001,
+}
+
+Frame "TEXT" "ShopDescText" {
+    FontFlags "FIXEDSIZE",
+    FrameFont "MasterFont", 0.0115, "",
+    FontColor 0.86 0.88 0.92 1.0,
+    FontShadowColor 0.0 0.0 0.0 0.9,
+    FontShadowOffset 0.001 -0.001,
+}
+
+Frame "TEXT" "ShopTooltipText" {
+    FrameFont "MasterFont", 0.0115, "",
+    FontColor 1.0 1.0 1.0 1.0,
+    FontShadowColor 0.0 0.0 0.0 0.9,
+    FontShadowOffset 0.001 -0.001,
+}
+

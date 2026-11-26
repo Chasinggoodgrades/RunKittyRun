@@ -13,25 +13,40 @@ public static class ShopFrame
     private static framehandle rewardsPanel;
     private static framehandle miscPanel;
     private static framehandle detailsPanel;
+    private static framehandle detailIcon;
+    private static framehandle detailIconFrame;
+    private static framehandle detailDivider;
+    private static framehandle costIcon;
     private static framehandle nameLabel;
     private static framehandle descriptionLabel;
     private static framehandle costLabel;
     private static framehandle buyButton;
     private static framehandle sellButton;
     private static framehandle upgradeTooltip;
+    private static framehandle selectedMarker; // local only: the highlight of the slot this machine's player picked
     private static framehandle GameUI = originframetype.GameUI.GetOriginFrame(0);
-    private const float buttonWidth = 0.025f;
-    private const float buttonHeight = 0.025f;
+
+    // Layout (frame coordinates). Everything is derived from these, so the look can be tuned here.
+    private const float slotSize = 0.026f;
+    private const float slotPitch = 0.0285f;
+    private const int slotColumns = 6;
+    private const float slotMargin = 0.008f;
     private const float panelPadding = 0.015f;
+    private const float panelGap = 0.022f;       // between two item panels, room for the panel title
+    private const float topInset = 0.032f;       // header + first panel title
+    private const float bottomInset = 0.014f;
     private const float frameX = 0.4f;
-    private const float frameY = 0.25f;
+    private const float minFrameY = 0.25f;
     private const float panelX = (frameX / 2) - panelPadding;
-    private const float panelY = (frameY / 3) - (panelPadding * 2);
     private const float detailsPanelX = frameX - (panelX + (panelPadding * 2));
-    private const float detailsPanelY = frameY - (panelPadding * 2);
+    private const float detailsIconSize = 0.04f;
+    private const float detailsPad = 0.012f;
+    private const float buttonHeight = 0.024f;
+    private const float buttonGap = 0.005f;
     private const int ActiveAlpha = 255;
     private const int DisabledAlpha = 150;
-    private const string DisabledPath = "UI\\Widgets\\EscMenu\\Human\\human-options-button-background-disabled.blp";
+    private const string GoldIconPath = "UI\\Widgets\\ToolTips\\Human\\ToolTipGoldIcon.blp";
+    private const string EmptyIconPath = "UI\\Widgets\\EscMenu\\Human\\blank-background.blp";
 
     public static void Initialize()
     {
@@ -60,19 +75,19 @@ public static class ShopFrame
 
     private static void InitializeShopFrame()
     {
-        shopFrame = BlzCreateFrameByType("BACKDROP", "Shop Frame", GameUI, "QuestButtonPushedBackdropTemplate", 0);
+        shopFrame = BlzCreateFrame("ShopWindowBackdrop", GameUI, 0, 0);
         BlzFrameSetAbsPoint(shopFrame, FRAMEPOINT_CENTER, 0.40f, 0.375f);
-        BlzFrameSetSize(shopFrame, frameX, frameY);
-        FrameManager.CreateHeaderFrame(shopFrame);
+        BlzFrameSetSize(shopFrame, frameX, minFrameY);
+        FrameManager.CreateHeaderFrame(shopFrame, "Shop");
     }
 
     private static void InitializePanels()
     {
-        relicsPanel = BlzCreateFrame("QuestButtonDisabledBackdropTemplate", shopFrame, 0, 0);
-        relicsPanel.SetPoint(FRAMEPOINT_TOPLEFT, panelPadding, -panelPadding * 2, shopFrame, FRAMEPOINT_TOPLEFT);
-        relicsPanel.SetSize(panelX, panelY);
-        rewardsPanel = CreatePanel(relicsPanel, 0, -panelPadding);
-        miscPanel = CreatePanel(rewardsPanel, 0, -panelPadding);
+        relicsPanel = BlzCreateFrame("ShopPanelBackdrop", shopFrame, 0, 0);
+        relicsPanel.SetPoint(FRAMEPOINT_TOPLEFT, panelPadding, -topInset, shopFrame, FRAMEPOINT_TOPLEFT);
+        relicsPanel.SetSize(panelX, 0.05f);
+        rewardsPanel = CreatePanel(relicsPanel);
+        miscPanel = CreatePanel(rewardsPanel);
     }
 
     private static void InitializePanelTitles()
@@ -84,56 +99,87 @@ public static class ShopFrame
 
     private static void CreatePanelTitle(framehandle panel, string title)
     {
-        var titleFrame = BlzCreateFrameByType("TEXT", "titleFrame", panel, "", 0);
-        BlzFrameSetPoint(titleFrame, FRAMEPOINT_TOP, panel, FRAMEPOINT_TOP, 0, 0.01f);
+        var titleFrame = BlzCreateFrame("ShopPanelTitleText", panel, 0, 0);
+        titleFrame.SetSize(panelX, 0.014f);
+        BlzFrameSetPoint(titleFrame, FRAMEPOINT_BOTTOM, panel, FRAMEPOINT_TOP, 0, 0.002f);
         BlzFrameSetText(titleFrame, title);
-        BlzFrameSetTextColor(titleFrame, BlzConvertColor(255, 255, 255, 0));
-        BlzFrameSetScale(titleFrame, 1.2f);
+        titleFrame.SetTextAlignment(textaligntype.Center, textaligntype.Center);
     }
 
-    private static framehandle CreatePanel(framehandle parent, float x, float y)
+    private static framehandle CreatePanel(framehandle parent)
     {
-        var panel = BlzCreateFrame("QuestButtonDisabledBackdropTemplate", parent, 0, 0);
-        BlzFrameSetPoint(panel, FRAMEPOINT_TOPLEFT, parent, FRAMEPOINT_BOTTOMLEFT, x, y);
-        panel.SetSize(panelX, panelY);
+        var panel = BlzCreateFrame("ShopPanelBackdrop", parent, 0, 0);
+        BlzFrameSetPoint(panel, FRAMEPOINT_TOPLEFT, parent, FRAMEPOINT_BOTTOMLEFT, 0, -panelGap);
+        panel.SetSize(panelX, 0.05f);
         return panel;
     }
 
     private static void InitializeDetailsPanel()
     {
-        detailsPanel = BlzCreateFrame("QuestButtonDisabledBackdropTemplate", shopFrame, 0, 0);
-        var detailsPanelX = frameX - (panelX + (panelPadding * 2));
-        var detailsPanelY = frameY - (panelPadding * 2);
+        detailsPanel = BlzCreateFrame("ShopPanelBackdrop", shopFrame, 0, 0);
         detailsPanel.SetPoint(framepointtype.TopRight, -panelPadding, -panelPadding, shopFrame, framepointtype.TopRight);
-        detailsPanel.SetSize(detailsPanelX, detailsPanelY);
+        detailsPanel.SetSize(detailsPanelX, minFrameY - (panelPadding * 2));
 
-        nameLabel = BlzCreateFrameByType("TEXT", "nameLabel", detailsPanel, "", 0);
-        costLabel = BlzCreateFrameByType("TEXT", "costLabel", detailsPanel, "", 0);
-        descriptionLabel = BlzCreateFrameByType("TEXT", "descriptionLabel", detailsPanel, "", 0);
+        var contentWidth = detailsPanelX - (detailsPad * 2);
 
+        // item icon with its own slot frame, name and cost beside it
+        detailIconFrame = BlzCreateFrame("ShopSlotBackdropFrame", detailsPanel, 0, 0);
+        detailIconFrame.SetSize(detailsIconSize, detailsIconSize);
+        detailIconFrame.SetPoint(framepointtype.TopLeft, detailsPad, -detailsPad, detailsPanel, framepointtype.TopLeft);
+        detailIcon = BlzCreateFrameByType("BACKDROP", "ShopDetailsIcon", detailIconFrame, "", 0);
+        detailIcon.SetPoint(framepointtype.TopLeft, 0.003f, -0.003f, detailIconFrame, framepointtype.TopLeft);
+        detailIcon.SetPoint(framepointtype.BottomRight, -0.003f, 0.003f, detailIconFrame, framepointtype.BottomRight);
+        detailIcon.SetTexture(EmptyIconPath, 0, false);
+
+        nameLabel = BlzCreateFrame("ShopNameText", detailsPanel, 0, 0);
+        nameLabel.SetSize(contentWidth - detailsIconSize - 0.008f, 0.026f);
+        nameLabel.SetPoint(framepointtype.TopLeft, 0.008f, 0, detailIconFrame, framepointtype.TopRight);
+
+        costIcon = BlzCreateFrameByType("BACKDROP", "ShopCostIcon", detailsPanel, "", 0);
+        costIcon.SetSize(0.012f, 0.012f);
+        costIcon.SetPoint(framepointtype.BottomLeft, 0.008f, 0.001f, detailIconFrame, framepointtype.BottomRight);
+        costIcon.SetTexture(GoldIconPath, 0, true);
+
+        costLabel = BlzCreateFrame("ShopCostText", detailsPanel, 0, 0);
+        costLabel.SetSize(contentWidth - detailsIconSize - 0.024f, 0.014f);
+        costLabel.SetPoint(framepointtype.Left, 0.003f, 0, costIcon, framepointtype.Right);
+
+        detailDivider = BlzCreateFrame("ShopDividerBackdrop", detailsPanel, 0, 0);
+        detailDivider.SetSize(contentWidth, 0.004f);
+        detailDivider.SetPoint(framepointtype.TopLeft, 0, -0.007f, detailIconFrame, framepointtype.BottomLeft);
+
+        // buttons: Buy / Sell on the bottom row, Upgrade across the row above
         buyButton = BlzCreateFrame("ScriptDialogButton", detailsPanel, 0, 0);
         sellButton = BlzCreateFrame("ScriptDialogButton", detailsPanel, 0, 0);
-        upgradeButton = BlzCreateFrame("DebugButton", detailsPanel, 0, 0);
+        upgradeButton = BlzCreateFrame("ScriptDialogButton", detailsPanel, 0, 0);
 
-        nameLabel.SetSize(detailsPanelX - panelPadding, detailsPanelY / 6);
-        costLabel.SetSize(detailsPanelX - panelPadding, detailsPanelY / 6);
-        descriptionLabel.SetSize(detailsPanelX - panelPadding, detailsPanelY / 4);
+        var halfWidth = (contentWidth - buttonGap) / 2;
+        buyButton.SetSize(halfWidth, buttonHeight);
+        sellButton.SetSize(halfWidth, buttonHeight);
+        upgradeButton.SetSize(contentWidth, buttonHeight);
 
-        buyButton.SetSize(detailsPanelX / 3.00f, detailsPanelY / 6);
-        sellButton.SetSize(detailsPanelX / 3.00f, detailsPanelY / 6);
-        upgradeButton.SetSize(detailsPanelX / 3.0f, detailsPanelY / 6);
+        buyButton.SetPoint(framepointtype.BottomLeft, detailsPad, detailsPad, detailsPanel, framepointtype.BottomLeft);
+        sellButton.SetPoint(framepointtype.BottomRight, -detailsPad, detailsPad, detailsPanel, framepointtype.BottomRight);
+        upgradeButton.SetPoint(framepointtype.BottomLeft, 0, buttonGap, buyButton, framepointtype.TopLeft);
 
-        nameLabel.SetPoint(framepointtype.TopLeft, panelPadding / 2, -panelPadding, detailsPanel, framepointtype.TopLeft);
-        costLabel.SetPoint(framepointtype.TopLeft, 0, -panelPadding, nameLabel, framepointtype.TopLeft);
-        descriptionLabel.SetPoint(framepointtype.TopLeft, 0, 0, costLabel, framepointtype.BottomLeft);
-
-        upgradeButton.SetPoint(framepointtype.BottomLeft, panelPadding, panelPadding, detailsPanel, framepointtype.BottomLeft);
-        sellButton.SetPoint(framepointtype.BottomRight, -panelPadding, panelPadding, detailsPanel, framepointtype.BottomRight);
-        buyButton.SetPoint(framepointtype.BottomLeft, 0, 0, sellButton, framepointtype.TopLeft);
+        // the description takes everything between the divider and the button stack (a text frame clips at its height)
+        descriptionLabel = BlzCreateFrame("ShopDescText", detailsPanel, 0, 0);
+        descriptionLabel.SetPoint(framepointtype.TopLeft, 0, -0.005f, detailDivider, framepointtype.BottomLeft);
+        descriptionLabel.SetPoint(framepointtype.BottomRight, -detailsPad, detailsPad + (buttonHeight * 2) + (buttonGap * 2), detailsPanel, framepointtype.BottomRight);
 
         buyButton.Text = "Buy";
         sellButton.Text = "Sell";
         upgradeButton.Text = "Upgrade";
+
+        // nothing picked yet
+        nameLabel.Text = "Shop";
+        descriptionLabel.Text = "Select an item to see its details.";
+        costIcon.Visible = false;
+        costLabel.Visible = false;
+        detailIconFrame.Visible = false;
+        buyButton.Visible = false;
+        sellButton.Visible = false;
+        upgradeButton.Visible = false;
 
         var BuyTrigger = trigger.Create();
         BuyTrigger.RegisterFrameEvent(buyButton, frameeventtype.Click);
@@ -152,9 +198,15 @@ public static class ShopFrame
     {
         try
         {
-            AddItemsToPanel(relicsPanel, GetRelicItems());
-            AddItemsToPanel(rewardsPanel, GetRewardItems());
-            AddItemsToPanel(miscPanel, GetMiscItems());
+            var total = AddItemsToPanel(relicsPanel, GetRelicItems());
+            total += AddItemsToPanel(rewardsPanel, GetRewardItems());
+            total += AddItemsToPanel(miscPanel, GetMiscItems());
+
+            // the window grows to fit every panel; the details panel follows it
+            var frameY = topInset + total + (panelGap * 2) + bottomInset;
+            if (frameY < minFrameY) frameY = minFrameY;
+            shopFrame.SetSize(frameX, frameY);
+            detailsPanel.SetSize(detailsPanelX, frameY - (panelPadding * 2));
         }
         catch (Exception ex)
         {
@@ -163,48 +215,42 @@ public static class ShopFrame
         }
     }
 
-    private static void AddItemsToPanel(framehandle panel, List<ShopItem> items)
+    /// <summary>Fills a panel with item slots and returns the height the panel needs.</summary>
+    private static float AddItemsToPanel(framehandle panel, List<ShopItem> items)
     {
-        int columns = 6;
-        int rows = (int)Math.Ceiling((double)items.Count / columns);
+        int rows = (int)Math.Ceiling((double)items.Count / slotColumns);
         for (int i = 0; i < items.Count; i++)
         {
-            int row = i / columns;
-            int column = i % columns;
-            var frameName = $"ShopItem_{items[i].ItemID}_{i}";
-            var button = BlzCreateFrameByType("BUTTON", frameName, panel, "ScoreScreenTabButtonTemplate", 0);
-            var icon = BlzCreateFrameByType("BACKDROP", frameName + "icon", button, "", 0);
+            int row = i / slotColumns;
+            int column = i % slotColumns;
+            var item = items[i];
+            var button = FrameManager.CreateSlotButton(panel, out var icon);
+            var marker = BlzCreateFrame("ShopSelectorBackdrop", button, 0, 0);
 
-            var x = column * buttonWidth;
-            var y = -row * buttonHeight;
+            button.SetSize(slotSize, slotSize);
+            button.SetPoint(framepointtype.TopLeft, slotMargin + (column * slotPitch), -(slotMargin + (row * slotPitch)), panel, framepointtype.TopLeft);
 
-            x += panelPadding / 2;
-            y -= panelPadding / 2;
-
-            button.SetSize(buttonWidth, buttonHeight);
-            button.SetPoint(framepointtype.TopLeft, x, y, panel, framepointtype.TopLeft);
-            var iconPath = items[i].IconPath;
+            var iconPath = item.IconPath;
             if (string.IsNullOrWhiteSpace(iconPath) || iconPath.EndsWith(".dds", StringComparison.OrdinalIgnoreCase))
             {
-                iconPath = Utility.GetItemIconPath(items[i].ItemID);
+                iconPath = Utility.GetItemIconPath(item.ItemID);
             }
+            item.IconPath = iconPath; // the details panel shows it too
             icon.SetTexture(iconPath, 0, false);
-            icon.SetPoints(button);
+
+            marker.SetPoint(framepointtype.TopLeft, -0.001f, 0.001f, button, framepointtype.TopLeft);
+            marker.SetPoint(framepointtype.BottomRight, 0.001f, -0.001f, button, framepointtype.BottomRight);
+            marker.Visible = false;
 
             var itemDetails = trigger.Create();
-            var relic = items[i];
-            CreateShopitemTooltips(button, relic);
+            CreateShopitemTooltips(button, item, i);
             itemDetails.RegisterFrameEvent(button, frameeventtype.Click);
-            itemDetails.AddAction( () => ShowItemDetails(relic));
+            itemDetails.AddAction(() => ShowItemDetails(item, marker));
         }
 
-        float panelHeight = (rows * buttonHeight) + panelPadding;
-        panel.SetSize((columns * buttonWidth) + panelPadding, panelHeight);
-        if (panelHeight > panelY)
-        {
-            shopFrame.SetSize(frameX, frameY + (panelHeight - panelY));
-            detailsPanel.SetSize(detailsPanelX, detailsPanelY + (panelHeight - panelY));
-        }
+        float panelHeight = (rows * slotPitch) + (slotMargin * 2) - (slotPitch - slotSize);
+        panel.SetSize(panelX, panelHeight);
+        return panelHeight;
     }
 
     private static void UpdateButtonStatus(player player)
@@ -244,7 +290,7 @@ public static class ShopFrame
         if (item == null) return;
         if (item.Type != ShopItemType.Relic) return;
         var kitty = Globals.ALL_KITTIES[player].Unit;
-        upgradeButton.Visible = true;
+        upgradeButton.Visible = item.Relic.Upgrades.Count > 0;
         sellButton.Visible = true;
         buyButton.Visible = true;
         if (!Utility.UnitHasItem(kitty, item.ItemID))
@@ -262,7 +308,7 @@ public static class ShopFrame
         // Need to add another check for upgrades per player.
     }
 
-    private static void ShowItemDetails(ShopItem shopItem)
+    private static void ShowItemDetails(ShopItem shopItem, framehandle marker)
     {
         var player = @event.Player;
         var frame = @event.Frame;
@@ -272,9 +318,19 @@ public static class ShopFrame
 
         if (!player.IsLocal) return;
         FrameManager.RefreshFrame(frame);
-        nameLabel.Text = $"{Colors.COLOR_YELLOW_ORANGE}Name:{Colors.COLOR_RESET} {shopItem.Name}";
-        costLabel.Text = $"{Colors.COLOR_YELLOW}Cost:{Colors.COLOR_RESET} {shopItem.Cost}";
-        descriptionLabel.Text = $"{Colors.COLOR_YELLOW_ORANGE}Description:{Colors.COLOR_RESET} {shopItem.Description}";
+
+        if (selectedMarker != null) selectedMarker.Visible = false;
+        selectedMarker = marker;
+        selectedMarker.Visible = true;
+
+        detailIcon.SetTexture(shopItem.IconPath ?? EmptyIconPath, 0, false);
+        detailIconFrame.Visible = true;
+        costIcon.Visible = true;
+        costLabel.Visible = true;
+
+        nameLabel.Text = shopItem.Name;
+        costLabel.Text = $"{Colors.COLOR_YELLOW}{shopItem.Cost}{Colors.COLOR_RESET}";
+        descriptionLabel.Text = shopItem.Description;
         UpdateButtonStatus(player);
         if (shopItem.Type == ShopItemType.Relic)
             RefreshUpgradeTooltip(shopItem.Relic);
@@ -284,12 +340,7 @@ public static class ShopFrame
     {
         try
         {
-            var background = framehandle.Create("QuestButtonBaseTemplate", GameUI, 0, 0);
-            upgradeTooltip = framehandle.Create("TEXT", $"UpgradeTooltip", background, "", 0);
-
-            upgradeTooltip.SetSize(0.25f, 0);
-            background.SetPoint(framepointtype.BottomLeft, -0.01f, -0.01f, upgradeTooltip, framepointtype.BottomLeft);
-            background.SetPoint(framepointtype.TopRight, 0.01f, 0.01f, upgradeTooltip, framepointtype.TopRight);
+            upgradeTooltip = FrameManager.CreateThemedTooltip(0.25f, 0.01f, out var background);
 
             upgradeButton.SetTooltip(background);
             upgradeTooltip.SetPoint(framepointtype.Bottom, 0, 0.01f, upgradeButton, framepointtype.Top);
@@ -301,22 +352,18 @@ public static class ShopFrame
         }
     }
 
-    private static void CreateShopitemTooltips(framehandle parent, ShopItem item)
+    private static void CreateShopitemTooltips(framehandle parent, ShopItem item, int index)
     {
         try
         {
-            var background = framehandle.Create("QuestButtonBaseTemplate", GameUI, 0, 0);
-            var tooltip = framehandle.Create("TEXT", $"{parent.Name}Tooltip", background, "", 0);
-
-            tooltip.SetSize(0.10f, 0);
-            background.SetPoint(framepointtype.BottomLeft, -0.01f, -0.01f, tooltip, framepointtype.BottomLeft);
-            background.SetPoint(framepointtype.TopRight, 0.01f, 0.01f, tooltip, framepointtype.TopRight);
+            var tooltip = FrameManager.CreateThemedTooltip(0.10f, 0.008f, out var background);
 
             parent.SetTooltip(background);
             tooltip.SetPoint(framepointtype.Bottom, 0, 0.01f, parent, framepointtype.Top);
             tooltip.Enabled = false;
 
             tooltip.Text = item.Name;
+            tooltip.SetTextAlignment(textaligntype.Center, textaligntype.Center);
         }
         catch (Exception ex)
         {
@@ -395,6 +442,11 @@ public static class ShopFrame
                         break;
 
                     case ShopItemType.Misc:
+                        if (selectedItem.MiscItem != null)
+                        {
+                            MiscItemUtil.HandlePurchase(player, selectedItem, kitty);
+                            break;
+                        }
                         AddItem(player, selectedItem.ItemID);
                         ReduceGold(player, selectedItem.Cost);
                         break;
@@ -451,6 +503,12 @@ public static class ShopFrame
                     relic?.RemoveEffect(kitty.Unit);
                     kitty.Relics.Remove(relic);
                     UpdateButtonStatus(player);
+                    return;
+                }
+
+                if (selectedItem.MiscItem != null)
+                {
+                    if (MiscItemUtil.HandleSell(player, selectedItem, kitty)) UpdateButtonStatus(player);
                     return;
                 }
 

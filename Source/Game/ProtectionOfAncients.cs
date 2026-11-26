@@ -183,6 +183,16 @@ public class ProtectionOfAncients
         kitty?.ProtectionOfAncients?.ActivationEvent(@event.Unit);
     }
 
+    /// <summary>
+    /// The Kitty died with the ability active. With async on, the glow followed the stand-in effect, which stands
+    /// down on death, so nobody could tell the Kitty was still going to be revived: the revive circle gets the glow
+    /// until the ability fires (or the circle goes away).
+    /// </summary>
+    public void ShowProtectedDeathEffect()
+    {
+        Kitty.Circle?.ShowProtection(ACTIVATION_EFFECT);
+    }
+
     private void ActivationEvent(unit Unit)
     {
         var relic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
@@ -197,6 +207,7 @@ public class ProtectionOfAncients
 
         Utility.SimpleTimer(EFFECT_DELAY, () =>
         {
+            Kitty.Circle?.ClearProtection();
             ApplyEffect(Unit);
             Kitty.RemoveKittyEffect(ref actiEffect);
         });

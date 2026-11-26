@@ -14,13 +14,20 @@ public class ShopItem
     public string Description { get; set; }
     public string IconPath { get; set; }
     public Relic Relic { get; set; }
+    public MiscItem MiscItem { get; set; }
     public string Award { get; set; }
     public ShopItemType Type { get; set; }
 
     public ShopItem(Relic relic)
     {
-        InitializeShopItem(relic.Name, relic.Cost, relic.ItemID, relic.Description, relic.IconPath, ShopItemType.Relic);
+        InitializeShopItem(relic, ShopItemType.Relic);
         Relic = relic;
+    }
+
+    public ShopItem(MiscItem miscItem)
+    {
+        InitializeShopItem(miscItem, ShopItemType.Misc);
+        MiscItem = miscItem;
     }
 
     public ShopItem(string award, int cost, int abilityID, string description)
@@ -34,6 +41,9 @@ public class ShopItem
     {
         InitializeShopItem(name, cost, itemID, description, iconPath, ShopItemType.Misc);
     }
+
+    private void InitializeShopItem(IShopEffect effect, ShopItemType type) =>
+        InitializeShopItem(effect.Name, effect.Cost, effect.ItemID, effect.Description, effect.IconPath, type);
 
     private void InitializeShopItem(string name, int cost, int itemID, string description, string iconPath, ShopItemType type)
     {
@@ -83,10 +93,18 @@ public class ShopItem
 
     public static List<ShopItem> ShopItemsMisc()
     {
-        return new List<ShopItem>
+        var items = new List<ShopItem>
         {
             new ShopItem("Anti-Block-Wand", 100, Constants.ITEM_ANTI_BLOCK_WAND, BlzGetAbilityIcon(Constants.ABILITY_ANTI_BLOCK_WAND_ITEM), "Wolves in the way? Buy this to make them move. Dang pesky wolves."),
             new ShopItem("Mysterious Orb", 50, Constants.ITEM_ORB_OF_MYSTERIES, Utility.GetItemIconPath(Constants.ITEM_ORB_OF_MYSTERIES), "A mysterious orb that has mysterious usefulness!")
         };
+
+        if (Gamemode.CurrentGameMode != GameMode.Solo && Gamemode.CurrentGameMode != GameMode.Team)
+        {
+            items.Add(new ShopItem(new ChainRing()));
+            items.Add(new ShopItem(new EngagementRing()));
+        }
+
+        return items;
     }
 }

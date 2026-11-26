@@ -85,6 +85,8 @@ public static class Constants
 	public const int ABILITY_WINGS_PATRIOTIC = 1093678131;
 	public const int ABILITY_TRAIL_DIVINELIGHT = 1093678132;
 	public const int ABILITY_FROSTBITE = 1093678133;
+	public const int ABILITY_CHAIN_RING_TOGGLE = 1093678134;
+	public const int ABILITY_ENGAGEMENT_RING_PROPOSE = 1093678135;
 	public const int ABILITY_AURA_SPECIAL = 1093677106;
 	public const int ABILITY_WINGS_PHOENIX = 1093677109;
 	public const int ABILITY_WINGS_ARCHANGEL = 1093677105;
@@ -178,6 +180,8 @@ public static class Constants
 	public const int ITEM_CLOAK_OF_FLAMES = 1227894864;
 	public const int ITEM_WOLF_MEAT = 1227894865;
 	public const int ITEM_CANDY = 1227894866;
+	public const int ITEM_CHAIN_RING = 1227894867;
+	public const int ITEM_ENGAGEMENT_RING = 1227894868;
 	public const int UNIT_KITTY = 1160785968;
 	public const int UNIT_KITTY_VENDOR = 1852271973;
 	public const int UNIT_DOG = 1853323111;

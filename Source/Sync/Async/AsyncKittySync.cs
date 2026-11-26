@@ -103,6 +103,9 @@ public static class AsyncKittySync
         {
             kitties[i].AsyncEffect?.Advance(TICK_PERIOD);
         }
+
+        // after the effects moved, so the camera sits on where they are this tick
+        CameraUtil.FollowAsyncEffect();
     }
 
     // ------------------------------------------------------------------ wire format
