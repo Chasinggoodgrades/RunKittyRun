@@ -44,8 +44,7 @@ public static class RewardsManager
         var unit = @event.Unit;
         if (IsResetSpell(spellID))
         {
-            ResetRewardSettings(unit);
-            Globals.ALL_KITTIES[unit.Owner].KittyMorphosis.ScaleUnit(); // changes scale of unit if they have amulet.
+            ResetRewards(unit.Owner);
             return;
         }
     }
@@ -54,9 +53,11 @@ public static class RewardsManager
 
     private static bool IsResetSpell(int spellID) => spellID == Constants.ABILITY_RESET;
 
-    private static void ResetRewardSettings(unit Unit)
+    /// <summary>
+    /// Removes every worn reward and restores the default look. Used by the reset ability and the rewards frame's reset button.
+    /// </summary>
+    public static void ResetRewards(player player)
     {
-        var player = Unit.Owner;
         var kitty = Globals.ALL_KITTIES[player];
         RewardHandlers.RemoveAll(kitty);
 
@@ -67,5 +68,6 @@ public static class RewardsManager
         kitty.AsyncEffect?.ReapplyUnitHidden(true); // the line above made the unit opaque again
 
         kitty.SaveData.SelectedData.Clear();
+        kitty.KittyMorphosis.ScaleUnit(); // changes scale of unit if they have amulet.
     }
 }

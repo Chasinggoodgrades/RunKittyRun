@@ -34,6 +34,7 @@ public static class RewardsFrame
             CountRewardFrames();
             AppendRewardsToFrames();
             CreateRandomRewardButton();
+            CreateResetRewardButton();
             FrameManager.CreateHeaderFrame(RewardFrame, "Rewards");
         }
         catch (Exception ex)
@@ -150,11 +151,55 @@ public static class RewardsFrame
 
         icon.SetTexture(dice, 0, false);
 
-        tooltipText.Text = $"{Colors.COLOR_YELLOW}Randomize Rewards{Colors.COLOR_RESET}\n{Colors.COLOR_ORANGE}Picks from your rewards list, applying random cosmetics.{Colors.COLOR_RESET}";
+        tooltipText.Text = $"{Colors.COLOR_YELLOW}Randomize Rewards{Colors.COLOR_RESET}\n{Colors.COLOR_ORANGE}Picks from your rewards list, applying random cosmetics, including a windwalk.{Colors.COLOR_RESET}";
 
         var t = trigger.Create();
         t.RegisterFrameEvent(button, frameeventtype.Click);
         t.AddAction(RandomRewardsButtonActions);
+    }
+
+    private static void CreateResetRewardButton()
+    {
+        // Sits left of the randomize button and does what the reset ability does.
+        const float ButtonSize = 0.028f;
+        const float ButtonGap = 0.004f;
+        const float TooltipWidth = 0.25f;
+        const float BackgroundPadding = 0.01f;
+        const float TooltipYOffset = 0.01f;
+
+        var button = FrameManager.CreateSlotButton(RewardFrame, out var icon);
+        button.SetPoint(framepointtype.BottomRight, -Padding - ButtonSize - ButtonGap, Padding, RewardFrame, framepointtype.BottomRight);
+        button.SetSize(ButtonSize, ButtonSize);
+
+        var tooltipText = FrameManager.CreateThemedTooltip(TooltipWidth, BackgroundPadding, out var background);
+        button.SetTooltip(background);
+        tooltipText.SetPoint(framepointtype.Bottom, 0, TooltipYOffset, button, framepointtype.Top);
+        tooltipText.Enabled = false;
+
+        icon.SetTexture(BlzGetAbilityIcon(Constants.ABILITY_RESET), 0, false);
+        tooltipText.Text = $"{Colors.COLOR_YELLOW}Reset Rewards{Colors.COLOR_RESET}\n{Colors.COLOR_ORANGE}Removes all worn cosmetics and restores your default look.{Colors.COLOR_RESET}";
+
+        var t = trigger.Create();
+        t.RegisterFrameEvent(button, frameeventtype.Click);
+        t.AddAction(ResetRewardsButtonActions);
+    }
+
+    private static void ResetRewardsButtonActions()
+    {
+        var player = @event.Player;
+        var frame = @event.Frame;
+        try
+        {
+            RewardsManager.ResetRewards(player);
+
+            if (!player.IsLocal) return;
+            FrameManager.RefreshFrame(frame);
+            RefreshSelectedMarkers(player);
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in ResetRewardsButtonActions: {e.Message}");
+        }
     }
 
     private static void RandomRewardsButtonActions()
@@ -179,13 +224,17 @@ public static class RewardsFrame
             Reward selectedTrail = (RewardHelp.Trails.Count > 0) ? RewardHelp.Trails[GetRandomInt(0, RewardHelp.Trails.Count - 1)] : null;
             Reward selectedAura = (RewardHelp.Auras.Count > 0) ? RewardHelp.Auras[GetRandomInt(0, RewardHelp.Auras.Count - 1)] : null;
 
+            Reward selectedWindwalk = (RewardHelp.Windwalks.Count > 0) ? RewardHelp.Windwalks[GetRandomInt(0, RewardHelp.Windwalks.Count - 1)] : null;
+
             selectedHat?.ApplyReward(player);
             selectedWings?.ApplyReward(player);
             selectedTrail?.ApplyReward(player);
             selectedAura?.ApplyReward(player);
+            selectedWindwalk?.ApplyReward(player);
 
             if (!player.IsLocal) return;
             FrameManager.RefreshFrame(frame);
+            RefreshSelectedMarkers(player);
         }
         catch (Exception e)
         {

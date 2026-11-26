@@ -15,6 +15,7 @@ public class Kitty : IFloatingTags, ICircleOwner
     public string Name { get; set; }
     public KittyData SaveData { get; set; }
     public List<Relic> Relics { get; set; }
+    public List<MiscItem> MiscItems { get; set; } = new List<MiscItem>();
     public KittyTime TimeProg { get; set; }
     public ShadowKitty ShadowKitty { get; set; }
     public PlayerGameData CurrentStats { get; set; } = new PlayerGameData();

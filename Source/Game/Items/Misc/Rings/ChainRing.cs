@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
-public class ChainRing : Relic
+public class ChainRing : MiscItem
 {
     public const int RelicItemID = Constants.ITEM_CHAIN_RING;
-    public new static int RelicAbilityID = Constants.ABILITY_CHAIN_RING_TOGGLE;
+    public static int RelicAbilityID = Constants.ABILITY_CHAIN_RING_TOGGLE;
     private const int RelicCost = 50;
     private const float CHAIN_RING_RANGE = 600.0f;
     private const float TOGGLE_COOLDOWN = 1.0f;
@@ -21,14 +21,13 @@ public class ChainRing : Relic
     public ChainRing() : base(
         $"{Colors.COLOR_PURPLE}Ring of Linked Fates|r",
         $"Switch on between rounds to chain yourself to every kitty with an enabled ring within {Colors.COLOR_ORANGE}{(int)CHAIN_RING_RANGE} range|r, and through them to others. " +
-        $"{Colors.COLOR_ORANGE}(Toggle)|r {Colors.COLOR_LIGHTBLUE}(No relic slot used)|r",
+        $"{Colors.COLOR_ORANGE}(Toggle)|r",
         RelicAbilityID,
         RelicItemID,
         RelicCost,
         IconPath
         )
     {
-        CountsTowardLimit = false;
     }
 
     public override void ApplyEffect(unit Unit)

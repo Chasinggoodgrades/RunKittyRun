@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
-public class EngagementRing : Relic
+public class EngagementRing : MiscItem
 {
     public const int RelicItemID = Constants.ITEM_ENGAGEMENT_RING;
-    public new static int RelicAbilityID = Constants.ABILITY_ENGAGEMENT_RING_PROPOSE;
+    public static int RelicAbilityID = Constants.ABILITY_ENGAGEMENT_RING_PROPOSE;
     private const int RelicCost = 50;
     private const float PROPOSAL_WINDOW = 5.0f;
     private const float PRESS_COOLDOWN = 1.0f;
@@ -30,14 +30,13 @@ public class EngagementRing : Relic
     public EngagementRing() : base(
         $"{Colors.COLOR_PINK}Engagement Ring|r",
         $"Press at the same time as another kitty with an Engagement Ring (within {Colors.COLOR_ORANGE}{(int)PROPOSAL_WINDOW} seconds|r) to marry the nearest one. Married kitties shower each other in hearts. " +
-        $"{Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(No relic slot used)|r",
+        $"{Colors.COLOR_ORANGE}(Active)|r",
         RelicAbilityID,
         RelicItemID,
         RelicCost,
         IconPath
         )
     {
-        CountsTowardLimit = false;
     }
 
     public override void ApplyEffect(unit Unit)

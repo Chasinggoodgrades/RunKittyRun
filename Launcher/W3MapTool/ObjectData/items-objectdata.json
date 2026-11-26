@@ -2256,7 +2256,7 @@
           "type": 3,
           "valueInt": null,
           "valueFloat": null,
-          "valueString": "Purchase the |cffcc00ffRing of Linked Fates|r|cff8080ff [Relic]|r",
+          "valueString": "Purchase the |cffcc00ffRing of Linked Fates|r",
           "level": null,
           "column": null
         },
@@ -2265,7 +2265,7 @@
           "type": 3,
           "valueInt": null,
           "valueFloat": null,
-          "valueString": "|cffffcc00Switch on between rounds to chain yourself to every kitty with an enabled ring within |cffff8c00600 range|r|cffffcc00, and through them to others. |r|cffff8c00(Toggle)|r |cffadd8e6(No relic slot used)|r",
+          "valueString": "|cffffcc00Switch on between rounds to chain yourself to every kitty with an enabled ring within |cffff8c00600 range|r|cffffcc00, and through them to others. |r|cffff8c00(Toggle)|r",
           "level": null,
           "column": null
         },
@@ -2274,7 +2274,7 @@
           "type": 3,
           "valueInt": null,
           "valueFloat": null,
-          "valueString": "|cffffcc00Switch on between rounds to chain yourself to every kitty with an enabled ring within |cffff8c00600 range|r|cffffcc00, and through them to others. |r|cffff8c00(Toggle)|r |cffadd8e6(No relic slot used)|r",
+          "valueString": "|cffffcc00Switch on between rounds to chain yourself to every kitty with an enabled ring within |cffff8c00600 range|r|cffffcc00, and through them to others. |r|cffff8c00(Toggle)|r",
           "level": null,
           "column": null
         },
@@ -2369,7 +2369,7 @@
           "type": 3,
           "valueInt": null,
           "valueFloat": null,
-          "valueString": "Purchase the |cffffc0cbEngagement Ring|r|cff8080ff [Relic]|r",
+          "valueString": "Purchase the |cffffc0cbEngagement Ring|r",
           "level": null,
           "column": null
         },
@@ -2378,7 +2378,7 @@
           "type": 3,
           "valueInt": null,
           "valueFloat": null,
-          "valueString": "|cffffcc00Press at the same time as another kitty with an Engagement Ring (within |cffff8c005 seconds|r|cffffcc00) to marry the nearest one. Married kitties shower each other in hearts. |r|cffff8c00(Active)|r |cffadd8e6(No relic slot used)|r",
+          "valueString": "|cffffcc00Press at the same time as another kitty with an Engagement Ring (within |cffff8c005 seconds|r|cffffcc00) to marry the nearest one. Married kitties shower each other in hearts. |r|cffff8c00(Active)|r",
           "level": null,
           "column": null
         },
@@ -2387,7 +2387,7 @@
           "type": 3,
           "valueInt": null,
           "valueFloat": null,
-          "valueString": "|cffffcc00Press at the same time as another kitty with an Engagement Ring (within |cffff8c005 seconds|r|cffffcc00) to marry the nearest one. Married kitties shower each other in hearts. |r|cffff8c00(Active)|r |cffadd8e6(No relic slot used)|r",
+          "valueString": "|cffffcc00Press at the same time as another kitty with an Engagement Ring (within |cffff8c005 seconds|r|cffffcc00) to marry the nearest one. Married kitties shower each other in hearts. |r|cffff8c00(Active)|r",
           "level": null,
           "column": null
         },

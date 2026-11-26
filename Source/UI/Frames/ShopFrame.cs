@@ -442,6 +442,11 @@ public static class ShopFrame
                         break;
 
                     case ShopItemType.Misc:
+                        if (selectedItem.MiscItem != null)
+                        {
+                            MiscItemUtil.HandlePurchase(player, selectedItem, kitty);
+                            break;
+                        }
                         AddItem(player, selectedItem.ItemID);
                         ReduceGold(player, selectedItem.Cost);
                         break;
@@ -498,6 +503,12 @@ public static class ShopFrame
                     relic?.RemoveEffect(kitty.Unit);
                     kitty.Relics.Remove(relic);
                     UpdateButtonStatus(player);
+                    return;
+                }
+
+                if (selectedItem.MiscItem != null)
+                {
+                    if (MiscItemUtil.HandleSell(player, selectedItem, kitty)) UpdateButtonStatus(player);
                     return;
                 }
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using WCSharp.Api;
 
-public abstract class Relic
+public abstract class Relic : IShopEffect
 {
     private static trigger CanBuyRelicsTrigger;
     private static List<player> CanBuyRelics;
